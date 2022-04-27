@@ -12,6 +12,7 @@
 #include <dt-bindings/i2c/i2c.h>
 #include <dt-bindings/pwm/pwm.h>
 #include <dt-bindings/memory-controller/stm32-fmc-sdram.h>
+#include <dt-bindings/memory-controller/stm32-fmc-nor-sram.h>
 #include <freq.h>
 
 / {
@@ -866,6 +867,14 @@
 				#address-cells = <1>;
 				#size-cells = <0>;
 				label = "STM32_FMC_SDRAM";
+				status = "disabled";
+			};
+
+			sram: sram {
+				compatible = "st,stm32-fmc-nor-sram";
+				#address-cells = <1>;
+				#size-cells = <0>;
+				label = "STM32_FMC_NOR_SRAM";
 				status = "disabled";
 			};
 		};

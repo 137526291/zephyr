@@ -1,0 +1,139 @@
+# Copyright (c) 2020, Teslabs Engineering S.L.
+# SPDX-License-Identifier: Apache-2.0
+
+description: |
+  STM32 Flexible Memory Controller (SRAM controller).
+
+  The FMC SRAM controller can be used to interface with external SRAM
+  memories. Up to 2 SRAM banks are supported with independent configuration. It
+  is worth to note that while settings are independent, some are shared or are
+  required to be set according to the most constraining device. Refer to the
+  properties description or the datasheet for more details.
+
+  The FMC SRAM controller is defined below the FMC node and SRAM banks are
+  defined as child nodes of the FMC SRAM node. You can either have bank 1 (@0),
+  bank 2 (@1) or both. You can enable the FMC SRAM controller in your board
+  DeviceTree file like this:
+  we can use SRAM to ctrl lcd gram.
+
+  &fmc {
+      status = "okay";
+      pinctrl-0 = <&fmc_nbl0_pe0 &fmc_nbl1_pe1 &fmc_nbl2_pi4...>;
+
+      sram {
+          status = "okay";
+
+          power-up-delay = <100>;
+          num-auto-refresh = <8>;
+          mode-register = <0x220>;
+          refresh-rate = <603>;
+
+          bank@0 {
+              reg = <0>;
+
+              st,sram-control = <STM32_FMC_SRAM_NC_9
+                                  STM32_FMC_SRAM_NR_12
+                                  STM32_FMC_SRAM_MWID_32
+                                  STM32_FMC_SRAM_NB_4
+                                  STM32_FMC_SRAM_CAS_2
+                                  STM32_FMC_SRAM_SDCLK_PERIOD_2
+                                  STM32_FMC_SRAM_RBURST_ENABLE
+                                  STM32_FMC_SRAM_RPIPE_0>;
+              st,sram-timing = <2 6 4 6 2 2 2>;
+          };
+
+          bank@1 {
+              reg = <1>;
+              ...
+          };
+      };
+  };
+
+  Note that you will find definitions for the st,sram-control field at
+  dt-bindings/memory-controller/stm32-fmc-sram.h. This file is already included
+  in the SoC DeviceTree files.
+
+  Finally, in order to make the memory available you will need to define new
+  memory device/s in DeviceTree:
+
+  sram1: sram@c0000000 {
+      compatible = "mmio-sram";
+      device_type = "memory";
+      reg = <0xc000000 DT_SIZE_M(X)>;
+      zephyr,memory-region = "SRAM1";
+  };
+
+  sram2: sram@d0000000 {
+      compatible = "mmio-sram";
+      device_type = "memory";
+      reg = <0xd000000 DT_SIZE_M(X)>;
+      zephyr,memory-region = "SRAM2";
+  };
+
+  It is important to use sram1 and sram2 node labels for bank 1 and bank 2
+  respectively. Memory addresses are 0xc0000000 and 0xd0000000 for bank 1 and
+  bank 2 respectively.
+
+compatible: "st,stm32-fmc-nor-sram"
+
+include: base.yaml
+
+properties:
+  label:
+    required: true
+
+  "#address-cells":
+    required: true
+    const: 1
+
+  "#size-cells":
+    required: true
+    const: 0
+
+  power-up-delay:
+    type: int
+    default: 100
+    description: Power-up delay in microseconds.
+
+child-binding:
+  description: SRAM bank.
+
+  properties:
+    reg:
+      type: int
+      required: true
+
+    st,sram-control:
+      type: array
+      required: true
+      description: |
+        SRAM control configuration. Expected fields, in order, are,
+
+        - DataAddressMux: 
+        - MemoryType: 
+        - MemoryDataWidth: 
+        - BurstAccessMode: 
+        - WaitSignalPolarity:
+        - WaitSignalActive: 
+        - WriteOperation:
+        - WaitSignal: 
+        - ExtendedMode:
+        - AsynchronousWait
+        - WriteBurst
+        - ContinuousClock
+        - WriteFifo
+        - PageSize
+
+    st,sram-timing:
+      type: array
+      required: true
+      description: |
+        SRAM timing configuration. Expected fields, in order, are,
+
+        - Timing.AddressSetupTime = 15;
+        - Timing.AddressHoldTime = 15;
+        - Timing.DataSetupTime = 255;
+        - Timing.BusTurnAroundDuration = 15;
+        - Timing.CLKDivision = 16;
+        - Timing.DataLatency = 17;
+        - Timing.AccessMode
