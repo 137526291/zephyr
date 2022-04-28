@@ -4,6 +4,7 @@ zephyr_library()
 
 zephyr_library_sources_ifdef(CONFIG_MEMC_STM32 memc_stm32.c)
 zephyr_library_sources_ifdef(CONFIG_MEMC_STM32_SDRAM memc_stm32_sdram.c)
+zephyr_library_sources_ifdef(CONFIG_MEMC_STM32_NOR_SRAM memc_stm32_nor_sram.c)
 zephyr_linker_sources_ifdef(CONFIG_MEMC_STM32_SDRAM SECTIONS memc_stm32_sdram.ld)
 
 zephyr_library_sources_ifdef(CONFIG_MEMC_MCUX_FLEXSPI memc_mcux_flexspi.c)

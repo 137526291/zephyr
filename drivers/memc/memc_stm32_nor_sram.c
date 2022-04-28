@@ -60,7 +60,8 @@ static int memc_stm32_nor_sram_init(const struct device *dev)
 		memcpy(&sram.Init, &config->banks[i].init, sizeof(sram.Init));
 
 		HAL_SRAM_Init(&sram,
-			(FMC_NORSRAM_TimingTypeDef *)&config->banks[i].timing);
+			(FMC_NORSRAM_TimingTypeDef *)&config->banks[i].timing,
+			NULL);
 	}
 
 	k_usleep(config->power_up_delay);
@@ -106,22 +107,6 @@ static const struct memc_stm32_nor_sram_bank_config bank_config[] = {
 static const struct memc_stm32_nor_sram_config config = {
 	.sram = (FMC_NORSRAM_TypeDef *)(DT_REG_ADDR(DT_INST_PARENT(0))),
 	.power_up_delay = DT_INST_PROP(0, power_up_delay),
-
-	.NSBank = DT_INST_PROP(0, NSBank),
-	.DataAddressMux = DT_INST_PROP(0, DataAddressMux),
-	.MemoryType = DT_INST_PROP(0, MemoryType),
-	.MemoryDataWidth = DT_INST_PROP(0, MemoryDataWidth),
-	.BurstAccessMode = DT_INST_PROP(0, BurstAccessMode),
-	.WaitSignalPolarity = DT_INST_PROP(0, WaitSignalPolarity),
-	.WaitSignalActive = DT_INST_PROP(0, WaitSignalActive),
-	.WriteOperation = DT_INST_PROP(0, WriteOperation),
-	.WaitSignal = DT_INST_PROP(0, WaitSignal),
-	.ExtendedMode = DT_INST_PROP(0, ExtendedMode),
-	.AsynchronousWait = DT_INST_PROP(0, AsynchronousWait),
-	.WriteBurst = DT_INST_PROP(0, WriteBurst),
-	.ContinuousClock = DT_INST_PROP(0, ContinuousClock),
-	.WriteFifo = DT_INST_PROP(0, WriteFifo),
-	.PageSize = DT_INST_PROP(0, PageSize),
 
 	.banks = bank_config,
 	.banks_len = ARRAY_SIZE(bank_config),
