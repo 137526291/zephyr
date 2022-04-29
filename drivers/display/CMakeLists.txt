@@ -16,6 +16,7 @@ zephyr_library_sources_ifdef(CONFIG_SDL_DISPLAY		display_sdl.c)
 zephyr_library_sources_ifdef(CONFIG_SSD1306		ssd1306.c)
 zephyr_library_sources_ifdef(CONFIG_SSD16XX		ssd16xx.c)
 zephyr_library_sources_ifdef(CONFIG_ST7789V		display_st7789v.c)
+zephyr_library_sources_ifdef(CONFIG_ST7789V_FMC		display_st7789v_fmc.c)
 zephyr_library_sources_ifdef(CONFIG_ST7735R		display_st7735r.c)
 
 zephyr_library_sources_ifdef(CONFIG_MICROBIT_DISPLAY

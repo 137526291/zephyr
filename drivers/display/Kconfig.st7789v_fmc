@@ -3,16 +3,16 @@
 # Copyright (c) 2019 Marc Reilly <marc@cpdesign.com.au>
 # SPDX-License-Identifier: Apache-2.0
 
-menuconfig ST7789V
+menuconfig ST7789V_FMC
 	bool "ST7789V display driver"
-	depends on SPI
+	depends on MEMC
 	help
-	  Enable driver for ST7789V display driver.
+	  Enable driver for ST7789V display driver use fmc interface.
 
 choice ST7789V_PIXEL_FORMAT
 	prompt "Color pixel format"
 	default ST7789V_RGB565
-	depends on ST7789V
+	depends on ST7789V_FMC
 	help
 	  Specify the color pixel format for the ST7789V display controller.
 
@@ -21,7 +21,6 @@ config ST7789V_RGB888
 
 config ST7789V_RGB565
 	bool "RGB565"
-
 
 
 endchoice

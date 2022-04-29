@@ -18,14 +18,14 @@ config LVGL_DISPLAY_DEV_NAME
 
 config LVGL_HOR_RES_MAX
 	int "Horizontal Screen Resolution"
-	default "$(DT_CZD_HOR_RES_MAX)" if HAS_DTS
+	# default "$(DT_CZD_HOR_RES_MAX)" if HAS_DTS
 	default 480
 	help
 	  Horizontal screen resolution in pixels
 
 config LVGL_VER_RES_MAX
 	int "Vertical Screen Resolution"
-	default "$(DT_CZD_VER_RES_MAX)" if HAS_DTS
+	# default "$(DT_CZD_VER_RES_MAX)" if HAS_DTS
 	default 320
 	help
 	  Vertical screen resolution in pixels
